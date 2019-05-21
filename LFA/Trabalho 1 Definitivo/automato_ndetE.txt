@@ -1,0 +1,19 @@
+01
+q1 q2 q3 q4 q5 q6
+q1
+q6
+q1 0 q2
+q1 1 vazio
+q2 0 vazio
+q2 1 vazio
+q2 E q3
+q3 0 vazio
+q3 1 vazio
+q3 E q4,q6
+q4 0 vazio
+q4 1 q5
+q5 0 vazio
+q5 1 vazio
+q5 E q4,q6
+q6 0 vazio
+q6 1 vazio

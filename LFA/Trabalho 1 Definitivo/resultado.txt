@@ -1,0 +1,61 @@
+Alfabeto: ['0', '1']
+Estados: ['q1', 'q2', 'q3', 'q4', 'q5', 'q6']
+Estado Inicial: ['q1']
+Estado(s) Final(is): ['q6']
+
+Regras: 
+1) (q1,0) = ['q2']
+2) (q1,1) = ['vazio']
+3) (q2,0) = ['vazio']
+4) (q2,1) = ['vazio']
+5) (q2,E) = ['q3']
+6) (q3,0) = ['vazio']
+7) (q3,1) = ['vazio']
+8) (q3,E) = ['q4', 'q6']
+9) (q4,0) = ['vazio']
+10) (q4,1) = ['q5']
+11) (q5,0) = ['vazio']
+12) (q5,1) = ['vazio']
+13) (q5,E) = ['q4', 'q6']
+14) (q6,0) = ['vazio']
+15) (q6,1) = ['vazio']
+
+
+----------Convertido para AFD:---------- 
+
+Estados D: ['vazio', ['q6'], ['q5'], ['q5', 'q6'], ['q4'], ['q4', 'q6'], ['q4', 'q5'], ['q4', 'q5', 'q6'], ['q3'], ['q3', 'q6'], ['q3', 'q5'], ['q3', 'q5', 'q6'], ['q3', 'q4'], ['q3', 'q4', 'q6'], ['q3', 'q4', 'q5'], ['q3', 'q4', 'q5', 'q6'], ['q2'], ['q2', 'q6'], ['q2', 'q5'], ['q2', 'q5', 'q6'], ['q2', 'q4'], ['q2', 'q4', 'q6'], ['q2', 'q4', 'q5'], ['q2', 'q4', 'q5', 'q6'], ['q2', 'q3'], ['q2', 'q3', 'q6'], ['q2', 'q3', 'q5'], ['q2', 'q3', 'q5', 'q6'], ['q2', 'q3', 'q4'], ['q2', 'q3', 'q4', 'q6'], ['q2', 'q3', 'q4', 'q5'], ['q2', 'q3', 'q4', 'q5', 'q6'], ['q1'], ['q1', 'q6'], ['q1', 'q5'], ['q1', 'q5', 'q6'], ['q1', 'q4'], ['q1', 'q4', 'q6'], ['q1', 'q4', 'q5'], ['q1', 'q4', 'q5', 'q6'], ['q1', 'q3'], ['q1', 'q3', 'q6'], ['q1', 'q3', 'q5'], ['q1', 'q3', 'q5', 'q6'], ['q1', 'q3', 'q4'], ['q1', 'q3', 'q4', 'q6'], ['q1', 'q3', 'q4', 'q5'], ['q1', 'q3', 'q4', 'q5', 'q6'], ['q1', 'q2'], ['q1', 'q2', 'q6'], ['q1', 'q2', 'q5'], ['q1', 'q2', 'q5', 'q6'], ['q1', 'q2', 'q4'], ['q1', 'q2', 'q4', 'q6'], ['q1', 'q2', 'q4', 'q5'], ['q1', 'q2', 'q4', 'q5', 'q6'], ['q1', 'q2', 'q3'], ['q1', 'q2', 'q3', 'q6'], ['q1', 'q2', 'q3', 'q5'], ['q1', 'q2', 'q3', 'q5', 'q6'], ['q1', 'q2', 'q3', 'q4'], ['q1', 'q2', 'q3', 'q4', 'q6'], ['q1', 'q2', 'q3', 'q4', 'q5'], ['q1', 'q2', 'q3', 'q4', 'q5', 'q6']]
+
+Estados Finais D: [['q6'], ['q5', 'q6'], ['q4', 'q6'], ['q4', 'q5', 'q6'], ['q3', 'q6'], ['q3', 'q5', 'q6'], ['q3', 'q4', 'q6'], ['q3', 'q4', 'q5', 'q6'], ['q2', 'q6'], ['q2', 'q5', 'q6'], ['q2', 'q4', 'q6'], ['q2', 'q4', 'q5', 'q6'], ['q2', 'q3', 'q6'], ['q2', 'q3', 'q5', 'q6'], ['q2', 'q3', 'q4', 'q6'], ['q2', 'q3', 'q4', 'q5', 'q6'], ['q1', 'q6'], ['q1', 'q5', 'q6'], ['q1', 'q4', 'q6'], ['q1', 'q4', 'q5', 'q6'], ['q1', 'q3', 'q6'], ['q1', 'q3', 'q5', 'q6'], ['q1', 'q3', 'q4', 'q6'], ['q1', 'q3', 'q4', 'q5', 'q6'], ['q1', 'q2', 'q6'], ['q1', 'q2', 'q5', 'q6'], ['q1', 'q2', 'q4', 'q6'], ['q1', 'q2', 'q4', 'q5', 'q6'], ['q1', 'q2', 'q3', 'q6'], ['q1', 'q2', 'q3', 'q5', 'q6'], ['q1', 'q2', 'q3', 'q4', 'q6'], ['q1', 'q2', 'q3', 'q4', 'q5', 'q6']]32
+
+----------Passo a passo do teorema:----------
+
+['q1'] -> Nova ocorrencia
+
+['q1'] gera [['q2'], ['vazio']]
+['q2', 'q3', 'q4', 'q6'] -> Nova ocorrencia
+
+['q2', 'q3', 'q4', 'q6'] gera [['vazio'], ['q5']]
+['q5', 'q4', 'q6'] -> Nova ocorrencia
+
+['q5', 'q4', 'q6'] gera [['vazio'], ['q5']]
+
+[['vazio'], ['q5']]: Nenhuma nova ocorrencia -> Backtrack para [['vazio'], ['q5', 'q4', 'q6']]
+[['vazio'], ['q5']]: Nenhuma nova ocorrencia -> Backtrack para [['q2', 'q3', 'q4', 'q6'], ['vazio']]
+[['q2'], ['vazio']]: Nenhuma nova ocorrencia -> Backtrack para [['q1']]
+
+----------Conjuntos gerados pelo teorema que utilizaremos no AFD:----------
+
+[['q1'], ['q2', 'q3', 'q4', 'q6'], ['q5', 'q4', 'q6'], ['vazio']]
+
+----------Passo a passo para o caso teste atual dentro do AFD:----------
+
+-> Para 01110:
+
+0 - Estado alterado de (q1) para (q2,q3,q4,q6)
+1 - Estado alterado de (q2,q3,q4,q6) para (q5,q4,q6)
+1 - Estado alterado de (q5,q4,q6) para (q5,q4,q6)
+1 - Estado alterado de (q5,q4,q6) para (q5,q4,q6)
+0 - Estado alterado de (q5,q4,q6) para (vazio)
+
+(vazio) nao eh estado final, logo: Rejeitado pelo automato!
+
