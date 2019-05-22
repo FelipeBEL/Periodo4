@@ -6,24 +6,7 @@ def remove_repetidos(lista):                            # Funcao que remove elem
         if i not in l:
             l.append(i)
     return l
-
-def verifica_conjunto(reg):
-    global estFinD
-
-    
-    for l in range(0,len(estFinD)):
-        flag = False
-        for k in range(0,len(registro)):
-            if len(registro[k]) == len(estFinD[l]):
-                for elemento in registro[k]:
-                    if elemento not in estFinD[l]:
-                        flag = True
-                        break
-
-                if flag == False: 
-                    estFinD.insert(l,registro[k])
-                    return
-
+                    
 def e_fecho(estados):
 
     efecho = []
@@ -61,9 +44,12 @@ def uniao(conjEst):
 
         while "vazio" in aux2:
             aux2.remove("vazio")
+
         aux2 = remove_repetidos(aux2)
+
         if len(aux2) == 0:
             aux2.append("vazio")
+
         concatenado.append(list(aux2))
       
         aux2[:] = []
@@ -75,19 +61,20 @@ def gera_r(conj):                                   # Funcao recursiva que utili
     global handler
 
     for i in range(len(conj)):
-        
-        if e_fecho(conj[i]) not in registro and conj[i] != ['vazio']:
-            
-            print_uniao = uniao(e_fecho(conj[i]))
-            handler.write(str(e_fecho(conj[i])) + " -> Nova ocorrencia\n\n")
-            handler.write(str(e_fecho(conj[i])) + " gera " + str(print_uniao) + "\n")
+        efecho_conj = e_fecho(conj[i])
 
-            registro.append(e_fecho(conj[i]))
-            gera_r(uniao(e_fecho(conj[i])))
+        if efecho_conj not in registro and efecho_conj != ['vazio']:        # vazio eh um estado mas não deve 
+                                                                            # ser considerado como uma nova ocorrencia
+            print_uniao = uniao(efecho_conj)
+            handler.write("E-fecho do novo estado = " + str(efecho_conj) + " -> Nova ocorrencia\n\n")
+            handler.write(str(efecho_conj) + " gera " + str(print_uniao) + "\n")
 
-            handler.write("\n" + str(print_uniao) + ": Nenhuma nova ocorrencia -> Backtrack para " + str(e_fecho(conj)))     
+            registro.append(efecho_conj)
+            gera_r(uniao(efecho_conj))
 
-def afne_to_afd():
+            handler.write("\n" + str(print_uniao) + ": Nenhuma nova ocorrencia -> Backtrack para " + str(efecho_conj))     
+
+def afne_to_afd(entrada):
     
     global alfabeto
     global registro
@@ -128,6 +115,7 @@ def afne_to_afd():
         aux.append(aux2)
         regras[i] = aux
 
+
     handler = open("resultado.txt","w")
     
     handler.write("Alfabeto: " + str(alfabeto) + "\n" + "Estados: " +
@@ -139,47 +127,28 @@ def afne_to_afd():
         handler.write(str(i+1) + ") " + "(" + str(aux[0]) + "," + str(aux[1]) + ") = " + str(aux[2]) + "\n")
 
     handler.write("\n")
- 
-    
+      
 
-    estadosD = []
-    aux1 = []
-    for i in range(1,2 ** len(estados)):                # Gera todos os subconjuntos de um conjunto
-        cont = len(estados) - 1
-        aux1[:] = []
-        binario = bin(i)
+    handler.write("\n----------Convertido para AFD:---------- \n\n" + "Estados D: Todos os subconjuntos de " + str(estados))
 
-        for j in range(len(binario)-1,1,-1):
-            if binario[j] == '1':
-                aux1.insert(0,estados[cont])
-            cont = cont - 1
-        estadosD.append(list(aux1))
 
-    estadosD.insert(0,'vazio')
+    handler.write("\n\nEstados Finais D: Todos os conjuntos do total de conjuntos que possuem o(s) estado(s) ")
 
-    
+    for e in estFin:
+        handler.write(str(e) + " ")
 
-    handler.write("\n----------Convertido para AFD:---------- \n\n" + "Estados D: " + str(estadosD))
+    handler.write("\n\n----------Passo a passo do teorema:----------\n\n")
+
+    registro = []
+    gera_r([estIni])            # registro eh setado aqui
 
     estFinD = []
     for k in range(0,len(estFin)):
-        for i in range(0,len(estadosD)):
-            if estFin[k] not in estadosD[i]:
-                i = i+1
+        for i in range(0,len(registro)):
+            if estFin[k] not in registro[i]:
+                continue
             else:
-                estFinD.append(estadosD[i])
-
-    estFinD = remove_repetidos(estFinD)
-
-    handler.write("\n\nEstados Finais D: " + str(estFinD) + str(len(estFinD)) + "\n\n")
-
-    registro = []
-
-    handler.write("----------Passo a passo do teorema:----------\n\n")
-
-    gera_r([estIni])
-
-    verifica_conjunto(registro)         # Garante que a ordem dos conjuntos nao atrapalhe
+                estFinD.append(registro[i])
 
     registro.append(['vazio'])          # Vazio sera tratado como estado
 
@@ -194,17 +163,7 @@ def afne_to_afd():
 
     handle.write('\n')
 
-    for item in estadosD:
-        if type(item) == str:
-            handle.write('(' + str(item) + ') ')
-        else:    
-            handle.write('(')
-            for elem in item:
-                handle.write(str(elem))
-                if elem != item[len(item)-1]:
-                    handle.write(',')
-                else:
-                    handle.write(') ')
+    handle.write("2^" + str(len(estados)) + "subconjuntos")
 
     handle.write('\n')
 
@@ -219,16 +178,17 @@ def afne_to_afd():
     handle.write('\n')
 
     for item in estFinD:
-        if type(item) == str:
-            handle.write('(' + str(item) + ') ')
-        else:    
-            handle.write('(')
-            for elem in item:
-                handle.write(str(elem))
-                if elem != item[len(item)-1]:
-                    handle.write(',')
-                else:
-                    handle.write(') ')
+        if item in registro:
+            if type(item) == str:
+                handle.write('(' + str(item) + ') ')
+            else:    
+                handle.write('(')
+                for elem in item:
+                    handle.write(str(elem))
+                    if elem != item[len(item)-1]:
+                        handle.write(',')
+                    else:
+                        handle.write(') ')
 
     handle.write('\n')
 
@@ -256,15 +216,9 @@ def afne_to_afd():
                     handle.write(')')
     
             handle.write('\n')
-
     handle.close()
 
     # Fim da escrita em arquivo
-    entrada = "01110"
     afd("AFN_E_convertido.txt",entrada,handler)                  # Chama codigo do AFD enviando como parametro o AFN convertido e seus casos teste
 
     handler.close()
-
-
-
-afne_to_afd()

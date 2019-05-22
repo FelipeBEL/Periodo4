@@ -17,15 +17,14 @@ class Node:
         else:
             self.right = direita
 
-    def view(self, level=1):
+    def view(self, handler, level=1):
         arrow = "---" * level
-        print ("|" + arrow + ">" + self.data)
+        handler.write("|" + arrow + ">" + self.data + "\n")
 
-        if self.right:
-            self.right.view(level+1)
         if self.left:
-            self.left.view(level+1)
-
+            self.left.view(handler,level+1)
+        if self.right:
+            self.right.view(handler,level+1)
         return
 
     

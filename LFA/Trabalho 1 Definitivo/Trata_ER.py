@@ -1,6 +1,6 @@
 from arvore import Node
 
-# Ignora essa pilha, ela so eh usada pra converter pra posfixo
+# Essa pilha eh usada pra converter pra posfixo
 class Stack:
      def __init__(self):
          self.items = []
@@ -25,16 +25,15 @@ def infixToPostfix(infixexpr):
     global operadores
 
     prec = {}
-    prec["."] = 3
+    prec["."] = 2
     prec["+"] = 2
-    prec["*"] = 0
     prec["("] = 1
     opStack = Stack()
     postfixList = []
     tokenList = infixexpr.split()
 
     for chc in infixexpr:
-        if chc != '*' and chc != '+' and chc != '(' and chc != ')' and chc != '.':
+        if chc != '*' and chc != '+' and chc != '(' and chc != ')' and chc != '.' and chc != ' ':
                 if chc not in alfabeto:
                         alfabeto.append(chc)
 
@@ -68,46 +67,16 @@ def infixToPostfix(infixexpr):
 alfabeto = []
 operadores = []
 
-'''
-print(infixToPostfix("A * . B + C . D"))
-print(infixToPostfix("A . ( B + C ) + D"))
-print(infixToPostfix("A . ( B + C + D )"))
-
-expressao = infixToPostfix("A . ( A . A + B . B )")
-print(expressao)
-
-
-pilha = []
-right = 0
-left = 0
-
-for i in range(len(expressao)-1,-1,-1):
-
-        if expressao[i] in operadores:
-                if i == len(expressao)-1: root = Node(expressao(len(expressao)-1))
-                else:  
-                        while right == 0:
-                                if expressao[i]
-                                root.insert(expressao[i],"right")
-                                right = 1
-                        elif left == 0:
-                                root.insert(expressao[i],"left")
-                                left = 1
-
-
-                if len(pilha) > 0:
-
-        else: pilha.append(expressao[i])
-'''
-
 def gera_afne(tree, level=1):
 
-        global temp
-        global transicoes
         global pilha_iniciais
         global pilha_finais
         global handle
         global cont_est
+        global ja_especificados
+
+        p1 = []
+        p2 = []
 
         if tree.left:
                 gera_afne(tree.left,level+1)
@@ -116,16 +85,62 @@ def gera_afne(tree, level=1):
                 gera_afne(tree.right,level+1)
 
         if tree.data in alfabeto:
+                ja_especificados.append(cont_est)
                 handle.write(str(cont_est) + " " + str(tree.data) + " " + str(cont_est+1) + "\n")
+
+                for alfa in alfabeto:
+                        if alfa != tree.data:
+                                handle.write(str(cont_est) + " " + alfa + " vazio" + "\n")
+                                
                 pilha_iniciais.append(cont_est)
                 pilha_finais.append(cont_est+1)
                 cont_est = cont_est + 2
 
-        if tree.data == '.':
-                
 
-        if level == 1: 
-                print(tree.data)
+        if tree.data == '.':
+                p1.append(pilha_iniciais.pop())
+                p1.append(pilha_finais.pop())
+                p2.append(pilha_iniciais.pop())
+                p2.append(pilha_finais.pop())
+
+                handle.write(str(cont_est) + " E " + str(p2[0]) + "\n")
+                handle.write(str(p2[1]) + " E " + str(p1[0]) + "\n")
+                handle.write(str(p1[1]) + " E " + str(cont_est+1) + "\n")
+
+                pilha_iniciais.append(cont_est)
+                pilha_finais.append(cont_est+1)
+
+                cont_est = cont_est + 2
+
+        if tree.data == '+':
+                p1.append(pilha_iniciais.pop())
+                p1.append(pilha_finais.pop())
+                p2.append(pilha_iniciais.pop())
+                p2.append(pilha_finais.pop())
+
+                handle.write(str(cont_est) + " E " + str(p2[0]) + "\n")
+                handle.write(str(cont_est) + " E " + str(p1[0]) + "\n")
+                handle.write(str(p2[1]) + " E " + str(cont_est+1) + "\n")
+                handle.write(str(p1[1]) + " E " + str(cont_est+1) + "\n")
+
+                pilha_iniciais.append(cont_est)
+                pilha_finais.append(cont_est+1)
+
+                cont_est = cont_est + 2
+
+        if tree.data == '*':
+                p1.append(pilha_iniciais.pop())
+                p1.append(pilha_finais.pop())
+
+                handle.write(str(cont_est) + " E " + str(cont_est+1) + "\n")
+                handle.write(str(cont_est) + " E " + str(p1[0]) + "\n")
+                handle.write(str(p1[1]) + " E " + str(p1[0]) + "\n")
+                handle.write(str(p1[1]) + " E " + str(cont_est+1) + "\n")
+
+                pilha_iniciais.append(cont_est)
+                pilha_finais.append(cont_est+1)
+
+                cont_est = cont_est + 2
 
         return
 
@@ -146,42 +161,78 @@ def ArvoreBinER(expressao):
                         stack.append(operandoAtual)
 
                 else:
-                        parte1 = stack.pop()
                         parte2 = stack.pop()
-                        operandoAtual = Node(chc, parte2, parte1)
+                        parte1 = stack.pop()
+                        operandoAtual = Node(chc, parte1, parte2)
                         stack.append(operandoAtual)
     
         return stack.pop()
 
-#teste = criaArvore(infixToPostfix("A.(B+C)+D"))
-#teste.printEmNivel()
-global temp
-global transicoes
-global handle
-global pilha_iniciais
-global pilha_finais
-global cont_est
 
-cont_est = 0
-transicoes = []
-temp = []
+def trata_er(exp):
+        global handle
+        global pilha_iniciais
+        global pilha_finais
+        global cont_est
+        global ja_especificados
 
-exp = input("Expressao: ")
+        ja_especificados = []
+        cont_est = 0
+        pilha_iniciais = []
+        pilha_finais = []
 
-exp = exp.replace(""," ")
+        handler = open("arvore.txt","w")
 
-exp = infixToPostfix("0 . 0 . ( 0 + 1 ) *")
+        handler.write("----------Expressão inserida:----------\n\n" + exp + "\n\n")
 
-exp = exp.replace(" ", "")
+        exp = exp.replace(""," ")
 
-teste = ArvoreBinER(exp)
+        exp = infixToPostfix(exp)
 
-handle = open("AFN_E_convertido.txt","w")
-gera_afne(teste)
+        exp = exp.replace(" ", "")
 
-pilha_iniciais = []
-pilha_finais = []
+        handler.write("----------Expressão na forma posfixa:----------\n\n" + exp + "\n\n")
 
-handle.close()
+        arvore = ArvoreBinER(exp)
 
-teste.view()
+        handle = open("automato_ndetE.txt","w")
+
+        gera_afne(arvore)
+
+        handle.close()
+
+        handle = open("automato_ndetE.txt","w")
+        handle.close()
+
+        handle = open("automato_ndetE.txt","w")
+
+        for item in alfabeto:
+                handle.write(item)
+
+        handle.write('\n')
+
+        for item in range(cont_est):
+            handle.write(str(item) + " ")
+
+        handle.write('\n')
+
+        handle.write(str(cont_est-2) + "\n")
+        handle.write(str(cont_est-1) + "\n")
+
+        cont_est = 0
+        ja_especificados[:] = []
+        gera_afne(arvore)
+
+        for item in range(cont_est):
+                if item not in ja_especificados:
+                        for alfa in alfabeto:
+                                handle.write(str(item) + " " + alfa + " vazio" + "\n")
+
+
+        handle.close()
+
+        handler.write("----------Árvore Binária da ER:----------\n\n")
+
+        arvore.view(handler)
+
+        handler.close()

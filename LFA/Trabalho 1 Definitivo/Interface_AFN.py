@@ -3,6 +3,9 @@ from pygame import gfxdraw
 from AFN import afn
 from AFN_to_AFD import afn_to_afd
 from AFD import afd
+from Trata_ER import trata_er
+from AFNE_To_AFD import afne_to_afd
+from AFNE import afne, gera_ram
 
 def imprime_menu():                                               # Funcao que imprime menu principal
   screen.fill(WHITE)
@@ -12,7 +15,7 @@ def imprime_menu():                                               # Funcao que i
   text = basicFont.render("Selecione um botão", True, (0,0,0))
   textRect = text.get_rect()
   textRect.centerx = screen.get_rect().centerx
-  textRect.top = screen.get_rect().top + 100
+  textRect.top = screen.get_rect().top + 50
 
   screen.blit(text, textRect)
 
@@ -20,40 +23,68 @@ def imprime_menu():                                               # Funcao que i
 
   text = basicFont.render("Alterar AFN:", True, (0,0,0))
   textRect = text.get_rect()
-  textRect.left = screen.get_rect().left + 100
-  textRect.top = screen.get_rect().top + 280
+  textRect.left = screen.get_rect().left + 70
+  textRect.top = screen.get_rect().top + 200
 
   screen.blit(text, textRect)
 
   text = basicFont.render("Alterar AFD:", True, (0,0,0))
   textRect = text.get_rect()
-  textRect.left = screen.get_rect().left + 400
-  textRect.top = screen.get_rect().top + 280
+  textRect.left = screen.get_rect().left + 380
+  textRect.top = screen.get_rect().top + 200
 
   screen.blit(text, textRect)
 
   text = basicFont.render("AFD:", True, (0,0,0))
   textRect = text.get_rect()
-  textRect.left = screen.get_rect().left + 760
-  textRect.top = screen.get_rect().top + 280
+  textRect.left = screen.get_rect().left + 770
+  textRect.top = screen.get_rect().top + 200
 
   screen.blit(text, textRect)
 
   text = basicFont.render("AFN sem conversão:", True, (0,0,0))
   textRect = text.get_rect()
-  textRect.left = screen.get_rect().left + 100
-  textRect.top = screen.get_rect().top + 520
+  textRect.left = screen.get_rect().left + 20
+  textRect.top = screen.get_rect().top + 440
 
   screen.blit(text, textRect)
 
   text = basicFont.render("AFN com conversão:", True, (0,0,0))
   textRect = text.get_rect()
-  textRect.left = screen.get_rect().left + 600
-  textRect.top = screen.get_rect().top + 520
+  textRect.left = screen.get_rect().left + 630
+  textRect.top = screen.get_rect().top + 440
+
+  screen.blit(text, textRect)
+
+  text = basicFont.render("AFN-E sem conversão:", True, (0,0,0))
+  textRect = text.get_rect()
+  textRect.left = screen.get_rect().left + 10
+  textRect.top = screen.get_rect().top + 650
+
+  screen.blit(text, textRect)
+
+  text = basicFont.render("Inserir ER:", True, (0,0,0))
+  textRect = text.get_rect()
+  textRect.left = screen.get_rect().left + 400 
+  textRect.top = screen.get_rect().top + 650
+
+  screen.blit(text, textRect)
+
+  text = basicFont.render("AFN-E com conversão:", True, (0,0,0))
+  textRect = text.get_rect()
+  textRect.left = screen.get_rect().left + 600 
+  textRect.top = screen.get_rect().top + 650
 
   screen.blit(text, textRect)
 
   pygame.display.update()
+
+  text = basicFont.render("Alterar AFN-E:", True, (0,0,0))
+  textRect = text.get_rect()
+  textRect.left = screen.get_rect().left + 370 
+  textRect.top = screen.get_rect().top + 440
+
+  screen.blit(text, textRect)
 
 def imprime_tela_caso_teste():                                      # Funcao que imprime menu que solicita caso
   screen.fill(WHITE)                                                # teste
@@ -69,13 +100,29 @@ def imprime_tela_caso_teste():                                      # Funcao que
 
   pygame.display.update()
 
+def imprime_tela_er():
+  screen.fill(WHITE)                                                # teste
+  pygame.display.flip()
 
-def trataAFNKeyboard():                                             # Funcao que trata entradadas de dados do
-  global aux                                                        # teclado
-  global trata_shift
+  basicFont = pygame.font.SysFont(None, 60)
+  text = basicFont.render("Escreva sua ER:", True, (0,0,0))
+  textRect = text.get_rect()
+  textRect.centerx = screen.get_rect().centerx
+  textRect.top = screen.get_rect().top + 100
+
+  screen.blit(text, textRect)
+
+  pygame.display.update()
+
+
+def trataAFNKeyboard(flag=None):                                             # Funcao que trata entradadas de dados do
+  global aux                                                                 # teclado
+  
   i = 100
   j = 350
   aux = ""
+
+  trata_shift = -1
   
   while 1:
     
@@ -89,7 +136,8 @@ def trataAFNKeyboard():                                             # Funcao que
           return
 
         if event.key == 8:                                        # Ao apertar BACKSPACE apaga e recomeça
-          imprime_tela_caso_teste()                               # a entrada
+          if flag != 1: imprime_tela_caso_teste()                               # a entrada
+          else: imprime_tela_er() 
 
           aux = ""
           i = 100
@@ -140,7 +188,7 @@ def trataAFNKeyboard():                                             # Funcao que
 # main:
 
 pygame.init()
-screen = pygame.display.set_mode((1000, 800))
+screen = pygame.display.set_mode((970, 800))
 pygame.display.set_caption("Automatos Finitos")
 
 
@@ -153,17 +201,29 @@ imprime_menu()
 
 while 1:
 
-  for event in pygame.event.get():
-    pygame.draw.rect(screen, BLACK, (740, 350, 120, 80))                      # Definição dos botões do menu
-    pygame.draw.rect(screen, BLACK, (190, 590, 120, 80))                      
-    pygame.draw.rect(screen, BLACK, (690, 590, 120, 80))
-    pygame.draw.rect(screen, BLACK, (140, 350, 120, 80))
-    pygame.draw.rect(screen, BLACK, (440, 350, 120, 80))
-    pygame.draw.rect(screen, RED, (200, 600, 100, 60))
-    pygame.draw.rect(screen, RED, (700, 600, 100, 60))
-    pygame.draw.rect(screen, RED, (150, 360, 100, 60))
-    pygame.draw.rect(screen, RED, (750, 360, 100, 60))
-    pygame.draw.rect(screen, RED, (450, 360, 100, 60))
+  for event in pygame.event.get():                      # Definição dos botões do menu
+    pygame.draw.rect(screen, BLACK, (120, 250, 120, 80)) 
+    pygame.draw.rect(screen, BLACK, (420, 250, 120, 80))
+    pygame.draw.rect(screen, BLACK, (750, 250, 120, 80))  
+    pygame.draw.rect(screen, BLACK, (120, 490, 120, 80))
+    pygame.draw.rect(screen, BLACK, (420, 490, 120, 80))   
+    pygame.draw.rect(screen, BLACK, (750, 490, 120, 80))                    
+    pygame.draw.rect(screen, BLACK, (120, 700, 120, 80)) 
+    pygame.draw.rect(screen, BLACK, (420, 700, 120, 80)) 
+    pygame.draw.rect(screen, BLACK, (750, 700, 120, 80)) 
+    
+
+    
+    
+    pygame.draw.rect(screen, RED, (130, 260, 100, 60))
+    pygame.draw.rect(screen, RED, (430, 260, 100, 60))
+    pygame.draw.rect(screen, RED, (760, 260, 100, 60))
+    pygame.draw.rect(screen, RED, (130, 500, 100, 60))
+    pygame.draw.rect(screen, RED, (430, 500, 100, 60))
+    pygame.draw.rect(screen, RED, (760, 500, 100, 60))
+    pygame.draw.rect(screen, RED, (130, 710, 100, 60)) 
+    pygame.draw.rect(screen, RED, (430, 710, 100, 60)) 
+    pygame.draw.rect(screen, RED, (760, 710, 100, 60)) 
   
 
     if event.type == pygame.QUIT: 
@@ -173,10 +233,60 @@ while 1:
                                                                                      # ou clique do mouse
       
       xy = event.pos                                                                 # Pega (x,y) de cada evento
-      
+
+      if xy[0] > 130 and xy[0] < 230 and xy[1] > 710 and xy[1] < 770:                
+        pygame.draw.rect(screen, FIREBRICK, (130, 710, 100, 60))
+
+        if pygame.mouse.get_pressed()[0] == 1:                   
+          imprime_tela_caso_teste()
+          
+          trataAFNKeyboard()
+          imprime_menu()
+
+          # Aqui o codigo fonte do AFN sem conversao eh chamado (caso teste esta em aux)
+          afne(aux)
+          # Abre arquivo com resultado:
+          os.system("xdg-open resultado.txt")                    
+                                                                                     
+        # Se clicar em cima do botao: 
+        #if pygame.mouse.get_pressed()[0] == 1:                   
+          
+      if xy[0] > 430 and xy[0] < 530 and xy[1] > 710 and xy[1] < 770:                
+        pygame.draw.rect(screen, FIREBRICK, (430, 710, 100, 60))
+
+        if pygame.mouse.get_pressed()[0] == 1:
+          imprime_tela_er()
+          
+          trataAFNKeyboard(1)
+          imprime_menu()
+
+          trata_er(aux)
+
+          os.system("xdg-open arvore.txt && xdg-open automato_ndetE.txt")                   
+                                                                                     
+        # Se clicar em cima do botao: 
+        #if pygame.mouse.get_pressed()[0] == 1: 
+
+      if xy[0] > 760 and xy[0] < 860 and xy[1] > 710 and xy[1] < 770:                
+        pygame.draw.rect(screen, FIREBRICK, (760, 710, 100, 60))
+
+        if pygame.mouse.get_pressed()[0] == 1:                   
+          imprime_tela_caso_teste()
+          
+          trataAFNKeyboard()
+          imprime_menu()
+
+          # Aqui o codigo fonte do AFN sem conversao eh chamado (caso teste esta em aux)
+          afne_to_afd(aux)
+          # Abre arquivo com resultado:
+          os.system("xdg-open AFN_E_convertido.txt && xdg-open resultado.txt")                    
+                                                                                     
+        # Se clicar em cima do botao: 
+        #if pygame.mouse.get_pressed()[0] == 1:     
+
       # Para o botao da esquerda:
-      if xy[0] > 200 and xy[0] < 300 and xy[1] > 600 and xy[1] < 660:                # Se o mouse estiver
-        pygame.draw.rect(screen, FIREBRICK, (200, 600, 100, 60))                     # entre as cordenadas do
+      if xy[0] > 130 and xy[0] < 230 and xy[1] > 500 and xy[1] < 560:                # Se o mouse estiver
+        pygame.draw.rect(screen, FIREBRICK, (130, 500, 100, 60))                     # entre as cordenadas do
                                                                                      # botao N: botao escurece
         # Se clicar em cima do botao: 
         if pygame.mouse.get_pressed()[0] == 1:                   
@@ -190,8 +300,8 @@ while 1:
           # Abre arquivo com resultado:
           os.system("xdg-open resultado.txt")                                                               
 
-      if xy[0] > 750 and xy[0] < 850 and xy[1] > 360 and xy[1] < 420:                # Se o mouse estiver
-        pygame.draw.rect(screen, FIREBRICK, (750, 360, 100, 60))                     # entre as cordenadas do
+      if xy[0] > 760 and xy[0] < 860 and xy[1] > 260 and xy[1] < 320:                # Se o mouse estiver
+        pygame.draw.rect(screen, FIREBRICK, (760, 260, 100, 60))                     # entre as cordenadas do
                                                                                      # botao N: botao escurece
         # Se clicar em cima do botao: 
         if pygame.mouse.get_pressed()[0] == 1:                   
@@ -206,21 +316,27 @@ while 1:
           os.system("xdg-open resultado.txt")
 
       # Para o botao de cima:
-      if xy[0] > 150 and xy[0] < 250 and xy[1] > 360 and xy[1] < 420:
-        pygame.draw.rect(screen, FIREBRICK, (150, 360, 100, 60))
+      if xy[0] > 130 and xy[0] < 230 and xy[1] > 260 and xy[1] < 320:
+        pygame.draw.rect(screen, FIREBRICK, (130, 260, 100, 60))
         # Se clicar em cima do botao: 
         if pygame.mouse.get_pressed()[0] == 1:
           os.system("xdg-open automato_ndet.txt")
 
-      if xy[0] > 450 and xy[0] < 550 and xy[1] > 360 and xy[1] < 420:
-        pygame.draw.rect(screen, FIREBRICK, (450, 360, 100, 60))
+      if xy[0] > 430 and xy[0] < 530 and xy[1] > 260 and xy[1] < 320:
+        pygame.draw.rect(screen, FIREBRICK, (430, 260, 100, 60))
         # Se clicar em cima do botao: 
         if pygame.mouse.get_pressed()[0] == 1:
           os.system("xdg-open automato_det.txt")
+
+      if xy[0] > 430 and xy[0] < 530 and xy[1] > 500 and xy[1] < 560:
+        pygame.draw.rect(screen, FIREBRICK, (430, 500, 100, 60))
+        # Se clicar em cima do botao: 
+        if pygame.mouse.get_pressed()[0] == 1:
+          os.system("xdg-open automato_ndetE.txt")
       
       # Para do botao da direita:
-      if xy[0] > 700 and xy[0] < 800 and xy[1] > 600 and xy[1] < 660:
-        pygame.draw.rect(screen, FIREBRICK, (700, 600, 100, 60))
+      if xy[0] > 760 and xy[0] < 860 and xy[1] > 500 and xy[1] < 560:
+        pygame.draw.rect(screen, FIREBRICK, (760, 500, 100, 60))
         # Se clicar em cima do botao: 
         if pygame.mouse.get_pressed()[0] == 1:
           imprime_tela_caso_teste()
