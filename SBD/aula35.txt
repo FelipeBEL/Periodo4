@@ -1,0 +1,238 @@
+// Alunos:
+
+//  -> Felipe Alves Belisário
+//  -> Breno Caldeira Nascimento
+//  -> Adiel Pereira Prado
+
+Microsoft Windows [versão 6.1.7601]
+Copyright (c) 2009 Microsoft Corporation. Todos os direitos reservados.
+
+C:\Users\breno.nascimento>cd C:\Program Files\PostgreSQL\11\bin
+
+C:\Program Files\PostgreSQL\11\bin>psql --username=postgres
+Senha para usuário postgres:
+psql (11.1)
+AVISO: página de código do Console (850) difere da página de código do Windows (
+1252)
+         caracteres de 8 bits podem não funcionar corretamente. Veja página de
+         referência do psql "Notes for Windows users" para obter detalhes.
+Digite "help" para ajuda.
+
+postgres=# CREATE TABLE TESTE1(
+postgres(# atributo11 integer,
+postgres(# atributo12 varchar(60));
+CREATE TABLE
+postgres=# CREATE TABLE TESTE2(
+postgres(# atributo21 integer,
+postgres(# atributo22 varchar(60));
+CREATE TABLE
+postgres=# INSERT INTO TESTE1 (atributo11, atributo12) VALUES(1, 'David');
+INSERT 0 1
+postgres=# BEGIN;
+BEGIN
+postgres=# UPDATE TESTE1 SET atributo12 = 'Dave' WHERE atributo11 = 1;
+UPDATE 1
+postgres=# SELECT atributo12 FROM TESTE1 WHERE atributo11 = 1;
+ atributo12
+------------
+ Dave
+(1 registro)
+
+
+postgres=# ROLLBACK;
+ROLLBACK
+postgres=# SELECT atributo12 FROM TESTE1 WHERE atributo11 = 1;
+ atributo12
+------------
+ David
+(1 registro)
+
+
+postgres=# DELETE FROM TESTE1;
+DELETE 1
+postgres=# DELETE FROM TESTE2;
+DELETE 0
+postgres=# INSERT INTO TESTE1(atributo11, atributo12) VALUES(1,'David');
+INSERT 0 1
+postgres=# BEGIN;
+BEGIN
+postgres=# INSERT INTO TESTE2 (atributo21, atributo22) VALUES (2, 'Arthur');
+INSERT 0 1
+postgres=# UPDATE TESTE1 SET atributo12 = 'Robert' WHERE atributo11 = 1;
+UPDATE 1
+postgres=# SELECT * FROM TESTE1;
+ atributo11 | atributo12
+------------+------------
+          1 | Robert
+(1 registro)
+
+
+postgres=# ROLLBACK;
+ROLLBACK
+postgres=# SELECT * FROM TESTE1;
+ atributo11 | atributo12
+------------+------------
+          1 | David
+(1 registro)
+
+
+postgres=# SELECT * FROM TESTE2;
+ atributo21 | atributo22
+------------+------------
+(0 registro)
+
+
+postgres=# DELETE FROM TESTE1;
+DELETE 1
+postgres=# DELETE FROM TESTE2;
+DELETE 0
+postgres=# INSERT INTO TESTE1 (atributo11, atributo12) VALUES(1, 'David');
+INSERT 0 1
+postgres=# BEGIN;
+BEGIN
+postgres=# INSERT INTO TESTE2 (atributo21, atributo22) VALUES (2, 'Arthur');
+INSERT 0 1
+postgres=# SAVEPOINT FIRST;
+SAVEPOINT
+postgres=# UPDATE TESTE1 SET atributo12 = 'Robert' WHERE atributo11 = 1;
+UPDATE 1
+postgres=# SELECT * FROM TESTE1;
+ atributo11 | atributo12
+------------+------------
+          1 | Robert
+(1 registro)
+
+
+postgres=# SELECT * FROM TESTE2;
+ atributo21 | atributo22
+------------+------------
+          2 | Arthur
+(1 registro)
+
+
+postgres=# ROLLBACK TO FIRST;
+ROLLBACK
+postgres=# SELECT * FROM TESTE1;
+ atributo11 | atributo12
+------------+------------
+          1 | David
+(1 registro)
+
+
+postgres=# SELECT * FROM TESTE2;
+ atributo21 | atributo22
+------------+------------
+          2 | Arthur
+(1 registro)
+
+
+postgres=# ROLLBACK;
+ROLLBACK
+postgres=# SELECT * FROM TESTE1;
+ atributo11 | atributo12
+------------+------------
+          1 | David
+(1 registro)
+
+
+postgres=# SELECT * FROM TESTE2;
+ atributo21 | atributo22
+------------+------------
+(0 registro)
+
+
+postgres=# INSERT INTO TESTE2 (atributo21, atributo22) VALUES (9, 'Chris');
+INSERT 0 1
+postgres=# COMMIT;
+WARNING:  there is no transaction in progress
+COMMIT
+postgres=# SELECT * FROM TESTE2;
+ atributo21 | atributo22
+------------+------------
+          9 | Chris
+(1 registro)
+
+
+postgres=# BEGIN;
+BEGIN
+postgres=# UPDATE TESTE2 SET atributo22 = 'Gill' WHERE atributo21 = 9;
+UPDATE 1
+postgres=# COMMIT;
+COMMIT
+postgres=# ROLLBACK;
+WARNING:  there is no transaction in progress
+ROLLBACK
+postgres=# SELECT * FROM TESTE2;
+ atributo21 | atributo22
+------------+------------
+          9 | Gill
+(1 registro)
+
+
+postgres=#
+
+
+// DEADLOCKS //
+
+Microsoft Windows [versão 6.1.7601]
+Copyright (c) 2009 Microsoft Corporation. Todos os direitos reservados.
+
+C:\Users\breno.nascimento>cd C:\Program Files\PostgreSQL\11\bin
+
+C:\Program Files\PostgreSQL\11\bin>psql --username=postgres
+Senha para usuário postgres:
+psql (11.1)
+AVISO: página de código do Console (850) difere da página de código do Windows (
+1252)
+         caracteres de 8 bits podem não funcionar corretamente. Veja página de
+         referência do psql "Notes for Windows users" para obter detalhes.
+Digite "help" para ajuda.
+
+postgres=# SET SEARCH_PATH TO LOCADORA;
+SET
+postgres=# BEGIN;
+BEGIN
+postgres=# UPDATE CLIENTE SET
+postgres-# nome = 'Joao Gilberto'
+postgres-# WHERE numcliente = '1';
+UPDATE 1
+postgres=# UPDATE CLIENTE
+postgres-# SET nome = 'Marina Lima'
+postgres-# WHERE numcliente = '2';
+UPDATE 1
+postgres=#
+
+TERMINAL 2:
+
+Microsoft Windows [versão 6.1.7601]
+Copyright (c) 2009 Microsoft Corporation. Todos os direitos reservados.
+
+C:\Users\breno.nascimento>cd C:\Program Files\PostgreSQL\11\bin
+
+C:\Program Files\PostgreSQL\11\bin>psql --username=postgres
+Senha para usuário postgres:
+psql (11.1)
+AVISO: página de código do Console (850) difere da página de código do Windows (
+1252)
+         caracteres de 8 bits podem não funcionar corretamente. Veja página de
+         referência do psql "Notes for Windows users" para obter detalhes.
+Digite "help" para ajuda.
+
+postgres=# SET SEARCH_PATH TO LOCADORA;
+SET
+postgres=# BEGIN;
+BEGIN
+postgres=# UPDATE CLIENTE SET
+postgres-# nome = 'Laura Martins'
+postgres-# WHERE numcliente = '2';
+UPDATE 1
+postgres=# UPDATE CLIENTE
+postgres-# SET nome = 'Joao Gama'
+postgres-# WHERE numcliente = '1';
+ERROR:  deadlock detected
+DETALHE:  Process 6044 waits for ShareLock on transaction 608; blocked by proces
+s 5308.
+Process 5308 waits for ShareLock on transaction 609; blocked by process 6044.
+DICA:  See server log for query details.
+CONTEXTO:  while updating tuple (0,1) in relation "cliente"
+postgres=#
