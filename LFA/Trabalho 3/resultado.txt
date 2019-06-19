@@ -1,0 +1,60 @@
+Alfabeto: ['0', '1']
+Estados: ['q1']
+Estado Inicial: ['q1']
+Simbolo de inicio da pilha: z0
+
+Regras: 
+1) (q1,0,z0) = ['q1', '0', '0', 'z0']
+2) (q1,1,z0) = ['q1', '1', 'z0']
+3) (q1,0,0) = ['q1', '0', '0']
+4) (q1,1,1) = ['q1', '1', '1']
+5) (q1,1,0) = ['q1', 'E']
+6) (q1,0,1) = ['q1', 'E']
+7) (q1,E,z0) = ['q1', 'E']
+
+
+----------Ramificacoes geradas---------
+
+Entrada inserida: 001111
+
+0 - Estado alterado de q1 para q1
+Pilha: ['z0', '0', '0']
+
+0 - Estado alterado de q1 para q1
+Pilha: ['z0', '0', '0', '0']
+
+1 - Estado alterado de q1 para q1
+Pilha: ['z0', '0', '0']
+
+1 - Estado alterado de q1 para q1
+Pilha: ['z0', '0']
+
+1 - Estado alterado de q1 para q1
+Pilha: ['z0']
+
+1 - Estado alterado de q1 para q1
+Pilha: ['z0', '1']
+
+Backtrack para o estado q1 com pilha ['z0']
+
+E - Estado alterado de q1 para q1
+Pilha: []
+
+Backtrack para o estado q1 com pilha ['z0']
+
+Backtrack para o estado q1 com pilha ['z0', '0']
+
+Backtrack para o estado q1 com pilha ['z0', '0', '0']
+
+Backtrack para o estado q1 com pilha ['z0', '0', '0', '0']
+
+Backtrack para o estado q1 com pilha ['z0', '0', '0']
+
+Backtrack para o estado q1 com pilha ['z0']
+
+E - Estado alterado de q1 para q1
+Pilha: []
+
+Backtrack para o estado q1 com pilha ['z0']
+
+001111 -> Rejeitado pelo automato!
