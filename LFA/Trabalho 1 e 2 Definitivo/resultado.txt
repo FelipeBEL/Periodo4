@@ -1,0 +1,98 @@
+Alfabeto: ['0', '1']
+Estados: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15']
+Estado Inicial: ['14']
+Estado(s) Final(is): ['15']
+
+Regras: 
+1) (0,0) = ['1']
+2) (0,1) = ['vazio']
+3) (2,0) = ['3']
+4) (2,1) = ['vazio']
+5) (4,E) = ['0']
+6) (1,E) = ['2']
+7) (3,E) = ['5']
+8) (6,1) = ['7']
+9) (6,0) = ['vazio']
+10) (8,0) = ['9']
+11) (8,1) = ['vazio']
+12) (10,E) = ['6']
+13) (10,E) = ['8']
+14) (7,E) = ['11']
+15) (9,E) = ['11']
+16) (12,E) = ['13']
+17) (12,E) = ['10']
+18) (11,E) = ['10']
+19) (11,E) = ['13']
+20) (14,E) = ['4']
+21) (5,E) = ['12']
+22) (13,E) = ['15']
+23) (1,0) = ['vazio']
+24) (1,1) = ['vazio']
+25) (3,0) = ['vazio']
+26) (3,1) = ['vazio']
+27) (4,0) = ['vazio']
+28) (4,1) = ['vazio']
+29) (5,0) = ['vazio']
+30) (5,1) = ['vazio']
+31) (7,0) = ['vazio']
+32) (7,1) = ['vazio']
+33) (9,0) = ['vazio']
+34) (9,1) = ['vazio']
+35) (10,0) = ['vazio']
+36) (10,1) = ['vazio']
+37) (11,0) = ['vazio']
+38) (11,1) = ['vazio']
+39) (12,0) = ['vazio']
+40) (12,1) = ['vazio']
+41) (13,0) = ['vazio']
+42) (13,1) = ['vazio']
+43) (14,0) = ['vazio']
+44) (14,1) = ['vazio']
+45) (15,0) = ['vazio']
+46) (15,1) = ['vazio']
+
+
+----------Convertido para AFD:---------- 
+
+Estados D: Todos os subconjuntos de ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15']
+
+Estados Finais D: Todos os conjuntos do total de conjuntos que possuem o(s) estado(s) 15 
+
+----------Passo a passo do teorema:----------
+
+E-fecho do novo estado = ['14', '4', '0'] -> Nova ocorrencia
+
+['14', '4', '0'] gera [['1'], ['vazio']]
+E-fecho do novo estado = ['1', '2'] -> Nova ocorrencia
+
+['1', '2'] gera [['3'], ['vazio']]
+E-fecho do novo estado = ['3', '5', '12', '13', '10', '15', '6', '8'] -> Nova ocorrencia
+
+['3', '5', '12', '13', '10', '15', '6', '8'] gera [['9'], ['7']]
+E-fecho do novo estado = ['9', '11', '10', '13', '6', '8', '15'] -> Nova ocorrencia
+
+['9', '11', '10', '13', '6', '8', '15'] gera [['9'], ['7']]
+E-fecho do novo estado = ['7', '11', '10', '13', '6', '8', '15'] -> Nova ocorrencia
+
+['7', '11', '10', '13', '6', '8', '15'] gera [['9'], ['7']]
+
+[['9'], ['7']]: Nenhuma nova ocorrencia -> Backtrack para ['7', '11', '10', '13', '6', '8', '15']
+[['9'], ['7']]: Nenhuma nova ocorrencia -> Backtrack para ['9', '11', '10', '13', '6', '8', '15']
+[['9'], ['7']]: Nenhuma nova ocorrencia -> Backtrack para ['3', '5', '12', '13', '10', '15', '6', '8']
+[['3'], ['vazio']]: Nenhuma nova ocorrencia -> Backtrack para ['1', '2']
+[['1'], ['vazio']]: Nenhuma nova ocorrencia -> Backtrack para ['14', '4', '0']
+
+----------Conjuntos gerados pelo teorema que utilizaremos no AFD:----------
+
+[['14', '4', '0'], ['1', '2'], ['3', '5', '12', '13', '10', '15', '6', '8'], ['9', '11', '10', '13', '6', '8', '15'], ['7', '11', '10', '13', '6', '8', '15'], ['vazio']]
+
+----------Passo a passo para o caso teste atual dentro do AFD:----------
+
+-> Para 001:
+
+0 - Estado alterado de (14,4,0) para (1,2)
+0 - Estado alterado de (1,2) para (3,5,12,13,10,15,6,8)
+1 - Estado alterado de (3,5,12,13,10,15,6,8) para (7,11,10,13,6,8,15)
+
+(7,11,10,13,6,8,15) eh estado final, logo: Aceito pelo automato!
+

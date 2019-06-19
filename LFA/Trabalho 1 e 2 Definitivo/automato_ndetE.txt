@@ -1,0 +1,50 @@
+01
+0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 
+14
+15
+0 0 1
+0 1 vazio
+2 0 3
+2 1 vazio
+4 E 0
+1 E 2
+3 E 5
+6 1 7
+6 0 vazio
+8 0 9
+8 1 vazio
+10 E 6
+10 E 8
+7 E 11
+9 E 11
+12 E 13
+12 E 10
+11 E 10
+11 E 13
+14 E 4
+5 E 12
+13 E 15
+1 0 vazio
+1 1 vazio
+3 0 vazio
+3 1 vazio
+4 0 vazio
+4 1 vazio
+5 0 vazio
+5 1 vazio
+7 0 vazio
+7 1 vazio
+9 0 vazio
+9 1 vazio
+10 0 vazio
+10 1 vazio
+11 0 vazio
+11 1 vazio
+12 0 vazio
+12 1 vazio
+13 0 vazio
+13 1 vazio
+14 0 vazio
+14 1 vazio
+15 0 vazio
+15 1 vazio

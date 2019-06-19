@@ -1,0 +1,25 @@
+abc
+0 1 2 3 4 5 6
+0
+3 6
+0 a 0,1
+0 b 0,4
+0 c 0
+1 a vazio
+1 b 2
+1 c vazio
+2 a vazio
+2 b vazio
+2 c 3
+3 a vazio
+3 b vazio
+3 c vazio
+4 a vazio
+4 b vazio
+4 c 5
+5 a 6
+5 b vazio
+5 c vazio
+6 a vazio
+6 b vazio
+6 c vazio
