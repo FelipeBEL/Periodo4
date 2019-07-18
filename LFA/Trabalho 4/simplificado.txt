@@ -1,0 +1,63 @@
+-----Gramatica original-----
+
+S -> ASB
+A -> aAS | a | E
+B -> SbS | A | bb
+
+-----Passo 1: Remover e-producoes-----
+
+
+>> Removendo A -> E:
+
+S -> ASB | SB
+A -> aAS | a | E | aS
+B -> SbS | bb | E
+
+>> Removendo B -> E:
+
+S -> ASB | SB | AS | S
+A -> aAS | a | E | aS
+B -> SbS | bb | E
+
+>> Removendo E-producoes restantes das regras:
+
+S -> ASB | SB | AS | S
+A -> aAS | a | aS
+B -> SbS | bb
+
+-----Passo 2: Remover producoes unitarias-----
+
+S -> ASB | SB | AS
+A -> aAS | a | aS
+B -> SbS | bb
+
+-----Passo 3: Remover simbolos inuteis-----
+
+>> Etapa 1: Remover nao geradores
+
+S -> ASB | SB | AS
+A -> aAS | a | aS
+B -> SbS | bb
+
+>> Etapa 2: Remover nao alcancaveis
+
+S -> ASB | SB | AS
+A -> aAS | a | aS
+B -> SbS | bb
+
+-----Gramatica simplificada-----
+
+S -> ASB | SB | AS
+A -> aAS | a | aS
+B -> SbS | bb
+
+-----Forma Normal de Chomsky-----
+
+S -> EB | SB | AS
+A -> FS | a | CS
+B -> GS | DD
+C -> a
+D -> b
+E -> AS
+F -> CA
+G -> SD
